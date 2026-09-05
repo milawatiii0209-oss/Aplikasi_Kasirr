@@ -26,7 +26,7 @@ button{border:0;border-radius:8px;padding:9px 13px;background:#1760df;color:whit
 <div class="layout">
 <aside class="side"><div class="active">🏠 Dashboard</div><div>🛒 Transaksi</div><div>📦 Data Produk</div><div>📊 Laporan</div><div>⚙️ Pengaturan</div><div>🚪 Logout</div></aside>
 <main class="main">
-<section class="welcome"><div><h1>🛒 Aplikasi Kasir</h1><p>Melayani dengan cepat, mudah dan akurat</p></div><b>📅 Jumat, 22 Agustus 2025 &nbsp; 🕐 <span id="clock"></span></b></section>
+<section class="welcome"><div><h1>🛒 Aplikasi Kasir</h1><p>Melayani dengan cepat, mudah dan akurat</p></div><b>📅 Jumat 8 Mei 2026 &nbsp; 🕐 <span id="clock"></span></b></section>
 <section class="grid">
 <div class="card"><div class="head">Daftar Produk</div><input id="search" class="search" placeholder="Cari produk..." oninput="renderProducts()"><table><thead><tr><th>No</th><th>Nama Produk</th><th>Harga</th><th>Aksi</th></tr></thead><tbody id="products"></tbody></table></div>
 <div class="card"><div class="head">🛒 Keranjang Belanja <button class="red" onclick="clearCart()">🗑</button></div><div id="cart"></div><div class="summary"><div class="row"><b>Subtotal</b><b id="subtotal">Rp0</b></div><div class="row"><b>Diskon</b><input id="discount" type="number" min="0" value="0" style="width:80px;padding:8px" oninput="update()"><b>%</b></div><div class="row total"><span>Total</span><span id="total">Rp0</span></div><div class="pay"><b>Uang Dibayar</b><input id="paid" type="number" placeholder="Masukkan jumlah uang" oninput="update()"></div><div class="change">Kembalian <span style="float:right" id="change">Rp0</span></div><div class="actions"><button onclick="printReceipt()">🖨 Bayar & Cetak Struk</button><button class="red" onclick="clearCart()">🗑 Batal</button></div></div></div>
