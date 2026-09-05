@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aplikasi Kasir - Mila Wati</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#eef4fb;color:#172033}
+.top{height:86px;background:#1260df;color:white;display:flex;align-items:center;justify-content:space-between;padding:15px 28px}
+.brand{font-size:28px;font-weight:700}.brand small{display:block;font-size:16px;font-weight:400;margin-top:3px}
+.layout{display:flex;min-height:calc(100vh - 86px)}.side{width:215px;background:#123b7b;color:white;padding:38px 10px}
+.side div{padding:16px 18px;margin:7px 0;border-radius:10px;font-size:17px}.side .active{background:#1764e8}
+.main{flex:1;padding:24px;overflow:auto}.welcome{background:white;border:1px solid #d9e1ec;border-radius:16px;padding:20px 25px;display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.welcome h1{margin:0;color:#12316c}.welcome p{margin:5px 0;color:#627089}
+.grid{display:grid;grid-template-columns:1.05fr 1.05fr .65fr;gap:18px}.card{background:white;border:1px solid #d7e0ec;border-radius:16px;overflow:hidden}.head{background:#1760df;color:white;padding:13px 18px;font-size:21px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.search{margin:10px;padding:10px;border:1px solid #ccd7e6;border-radius:8px;width:calc(100% - 20px);font-size:15px}
+table{width:100%;border-collapse:collapse}th,td{padding:11px 10px;border:1px solid #e0e6ee;text-align:left;font-size:14px}th{background:#eef3fa}
+button{border:0;border-radius:8px;padding:9px 13px;background:#1760df;color:white;font-weight:600;cursor:pointer}button.red{background:#ef3340}.qty{padding:5px 9px;background:white;color:#16449a;border:1px solid #b9c8df}
+.summary{padding:18px}.row{display:flex;justify-content:space-between;margin:13px 0}.total{background:#dceaff;padding:14px;border-radius:9px;font-size:22px;font-weight:700;color:#123c99}.pay{margin-top:16px}.pay input{width:100%;padding:12px;border:1px solid #ccd7e6;border-radius:8px;font-size:16px}.change{background:#dcfae9;padding:13px;border-radius:8px;color:#08752b;font-weight:700;margin-top:12px}.actions{display:flex;gap:10px;margin-top:15px}.actions button{flex:1;padding:13px}
+.receipt{padding:18px;font-size:13px}.receipt h2{text-align:center}.receipt hr{border:0;border-top:1px dashed #555}.receipt .r{display:flex;justify-content:space-between;margin:8px 0}
+@media(max-width:900px){.side{display:none}.grid{grid-template-columns:1fr}.main{padding:12px}.top{height:70px;padding:12px 18px}.brand{font-size:22px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand">🛒 Aplikasi Kasir<small>Mila Wati</small></div><div>👤 Mila Wati<br><small>Kasir</small></div></header>
+<div class="layout">
+<aside class="side"><div class="active">🏠 Dashboard</div><div>🛒 Transaksi</div><div>📦 Data Produk</div><div>📊 Laporan</div><div>⚙️ Pengaturan</div><div>🚪 Logout</div></aside>
+<main class="main">
+<section class="welcome"><div><h1>🛒 Aplikasi Kasir</h1><p>Melayani dengan cepat, mudah dan akurat</p></div><b>📅 Jumat, 22 Agustus 2025 &nbsp; 🕐 <span id="clock"></span></b></section>
+<section class="grid">
+<div class="card"><div class="head">Daftar Produk</div><input id="search" class="search" placeholder="Cari produk..." oninput="renderProducts()"><table><thead><tr><th>No</th><th>Nama Produk</th><th>Harga</th><th>Aksi</th></tr></thead><tbody id="products"></tbody></table></div>
+<div class="card"><div class="head">🛒 Keranjang Belanja <button class="red" onclick="clearCart()">🗑</button></div><div id="cart"></div><div class="summary"><div class="row"><b>Subtotal</b><b id="subtotal">Rp0</b></div><div class="row"><b>Diskon</b><input id="discount" type="number" min="0" value="0" style="width:80px;padding:8px" oninput="update()"><b>%</b></div><div class="row total"><span>Total</span><span id="total">Rp0</span></div><div class="pay"><b>Uang Dibayar</b><input id="paid" type="number" placeholder="Masukkan jumlah uang" oninput="update()"></div><div class="change">Kembalian <span style="float:right" id="change">Rp0</span></div><div class="actions"><button onclick="printReceipt()">🖨 Bayar & Cetak Struk</button><button class="red" onclick="clearCart()">🗑 Batal</button></div></div></div>
+<div class="card"><div class="head">🖨 Struk Transaksi</div><div class="receipt" id="receipt"><h2>🛍<br>Aplikasi Kasir</h2><p style="text-align:center">Mila Wati<br>Bandung, Jawa Barat</p><hr><h3 style="text-align:center">STRUK PEMBELIAN</h3><div id="receiptItems">Belum ada transaksi.</div><hr><div class="r"><b>Total</b><b id="receiptTotal">Rp0</b></div><div class="r">Uang Dibayar <b id="receiptPaid">Rp0</b></div><div class="r">Kembalian <b id="receiptChange">Rp0</b></div><hr><p style="text-align:center">Terima Kasih 😊</p></div></div>
+</section></main></div>
+<script>
+const products=[["Indomie",3500],["Aqua",4000],["Chiki Balls",5000],["Teh Pucuk",4000],["Wafer",2500],["Roti Cokelat",6000],["Mie Instan",3500],["Susu Kotak",4500]];
+let cart={};
+const rupiah=n=>"Rp"+Number(n).toLocaleString("id-ID");
+function renderProducts(){let q=document.getElementById("search").value.toLowerCase();document.getElementById("products").innerHTML=products.map((p,i)=>p[0].toLowerCase().includes(q)?`<tr><td>${i+1}</td><td><b>${p[0]}</b></td><td>${rupiah(p[1])}</td><td><button onclick="add(${i})">+ Tambah</button></td></tr>`:"").join("")}
+function add(i){cart[i]=(cart[i]||0)+1;update()}
+function remove(i){delete cart[i];update()}
+function changeQty(i,d){cart[i]+=d;if(cart[i]<=0)delete cart[i];update()}
+function clearCart(){cart={};update()}
+function update(){
+ let sub=0, rows="";
+ Object.keys(cart).forEach(i=>{let p=products[i],q=cart[i],t=p[1]*q;sub+=t;rows+=`<tr><td>${+i+1}</td><td>${p[0]}</td><td><button class="qty" onclick="changeQty(${i},-1)">−</button> ${q} <button class="qty" onclick="changeQty(${i},1)">+</button></td><td>${rupiah(p[1])}</td><td>${rupiah(t)}</td><td><button class="red" onclick="remove(${i})">×</button></td></tr>`});
+ document.getElementById("cart").innerHTML=rows?`<table><thead><tr><th>No</th><th>Produk</th><th>Qty</th><th>Harga</th><th>Total</th><th>Aksi</th></tr></thead><tbody>${rows}</tbody></table>`:"<p style='padding:20px'>Keranjang masih kosong.</p>";
+ let disc=Math.min(100,Math.max(0,Number(document.getElementById("discount").value)||0)),total=sub-(sub*disc/100),paid=Number(document.getElementById("paid").value)||0;
+ document.getElementById("subtotal").textContent=rupiah(sub);document.getElementById("total").textContent=rupiah(total);document.getElementById("change").textContent=rupiah(Math.max(0,paid-total));
+ document.getElementById("receiptTotal").textContent=rupiah(total);document.getElementById("receiptPaid").textContent=rupiah(paid);document.getElementById("receiptChange").textContent=rupiah(Math.max(0,paid-total));
+ document.getElementById("receiptItems").innerHTML=rows?Object.keys(cart).map(i=>`<div class="r">${products[i][0]} × ${cart[i]} <b>${rupiah(products[i][1]*cart[i])}</b></div>`).join(""):"Belum ada transaksi.";
+}
+function printReceipt(){update();window.print()}
+function tick(){document.getElementById("clock").textContent=new Date().toLocaleTimeString("id-ID")}
+setInterval(tick,1000);tick();renderProducts();update();
+</script>
+</body>
+</html>
